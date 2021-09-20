@@ -1,0 +1,75 @@
+Part1a
+--------
+I have created the file for this functionality AveragePostsUserPerMonth.php
+
+
+Part1b
+-------
+I have created 2 folders for the test functional and one unit test will fail in this check part 2 for that
+
+
+Part2
+------
+File get contents is using the get method to register the token so it will return as 404 & I have written this peice of code in the phpunit test that will fail.
+
+
+
+Part3
+------
+Fatal error: Unparenthesized `a ? b : c ? d : e` is not supported. Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)` 
+we have to change the logic in working on the terinary operator as per mentioned above.
+We have to mention the request as post or get and perferebly details of user email should be sent as post
+
+
+Mysql connection issues mentioned in below steps
+
+1.create a dbconfig.php file(In our Project in App folder we can do) to define all DB details as CONST.
+
+2.create the Model.php(In our project in /App/config folder we can do) for the database connection and use PDO and also write use config file at top like the code below
+
+namespace App;
+
+use PDO;
+use App\DBConfig;
+
+abstract class Model
+{
+
+    /**
+     * Get the PDO database connection
+     *
+     * @return mixed
+     */
+    protected static function getDB()
+    {
+        static $db = null;
+
+        if ($db === null) {
+            $dsn = 'mysql:host=' . Config::DB_HOST . ';dbname=' . Config::DB_NAME . ';charset=utf8';
+            $db = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD);
+
+            // Throw an Exception when an error occurs
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }
+
+        return $db;
+    }
+}
+
+3.Extends the namespace of above file created and use PDO and connect to Mysql AND get details
+
+4.Another issue in that connection is PHP Script runs an SQL Statement to get a user’s details by email.However the input is not sanitized making it vulnerable to SQL Injection
+There are a few approaches to defend website from SQL Injection Attacks. These approaches are Whitelisting, Type Casting, and Character Escaping.
+
+5.We can use PDO query that will resolve all Sql injection by using the approches I mentioned.
+
+6.Dont use select * from untill you really want all the details this approach may affect the performance.
+
+
+Part 4
+-------
+1. Libraries & packages of functions and resources is for performing a particular task in PHP but we cannot be sure about security.
+2. We can check the security advices before downloading it.
+3. We can use libraries if that is having huge functionality request and resuablity of code is avaialble in that.
+4. We can do security scanning on our code Like Checkmarx , SonnarPHP, PMF
+
